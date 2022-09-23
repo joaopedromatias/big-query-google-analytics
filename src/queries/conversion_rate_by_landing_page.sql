@@ -1,5 +1,5 @@
 SELECT
-  page_path,
+  page_path as landing_page,
   ROUND( ( SUM(total_transactions) / COUNT(*) ) * 100, 2) AS conversion_rate
 FROM (
   SELECT
@@ -7,13 +7,13 @@ FROM (
     isEntrance,
     page.pagePath AS page_path
   FROM
-    `bigquery-public-data.google_analytics_sample.ga_sessions_2017043*`
+    `bigquery-public-data.google_analytics_sample.ga_sessions_*`
   CROSS JOIN
     UNNEST(hits)
   WHERE
     isEntrance = TRUE )
 GROUP BY
-  page_path
+  landing_page
 ORDER BY
   conversion_rate DESC
-  LIMIT 10
+  LIMIT 20

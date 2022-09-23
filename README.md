@@ -4,57 +4,45 @@ This is a NodeJS project that runs 10 queries against a public Google Analytics 
 
 The `goal` is to answer some business questions in order to optimize decision making 🎯
 
-## Transactions 💰
+PS: in order for it to work on your computer, you need to insert a valid service account credentials path and your Google Cloud Platform project id into the `.env` file. You can also authenticate using your own login by running `gcloud auth application-default login` (need to have the gcloud SDK installed on the machine and turn on the Big Query API on your Google Cloud Platform project).
 
-### 1. What was the revenue for each product? 
+## Bounce Rate 🏀
+
+### 1. What was the Bounce Rate by Channel? 
 
 ```sql
 SELECT
-  p.V2ProductName as product_name,
-  ROUND(SUM(p.productRevenue) / 1000000, 2) as product_revenue
-FROM `bigquery-public-data.google_analytics_sample.ga_sessions_2017041*`,
-  UNNEST(hits) AS h,
-  UNNEST(h.product) AS p
-  GROUP BY product_name
-  ORDER BY product_revenue DESC
-  LIMIT 10
+  channelGrouping,
+  ROUND( ( SUM(totals.bounces) / COUNT(*) ) * 100, 2 ) AS bounce_rate
+FROM
+  `bigquery-public-data.google_analytics_sample.ga_sessions_*`
+GROUP BY
+  channelGrouping
+ORDER BY
+  bounce_rate DESC
 ```
 
 ![answer to q1](./assets/q1.png)
 
-### 2. What was the revenue for each month? 
+### 2. What was the Bounce Rate by Device? 
 
 ```sql
 SELECT
-  FORMAT_DATE("%B", PARSE_DATE("%Y%m%d", date)) AS month,
-  SUM(totals.totalTransactionRevenue) / 1000000 as total_revenue
-  FROM
-    `bigquery-public-data.google_analytics_sample.ga_sessions_*`
-  GROUP BY month
-  ORDER BY total_revenue DESC
-  LIMIT 12
+  device.deviceCategory AS device,
+  ROUND( ( SUM(totals.bounces) / COUNT(*) ) * 100, 2 ) AS bounce_rate
+FROM
+  `bigquery-public-data.google_analytics_sample.ga_sessions_*`
+GROUP BY
+  device
+ORDER BY
+  bounce_rate DESC
 ```
 
 ![answer to q1](./assets/q2.png)
 
-### 3. What was the revenue for each weekday?
-
-```sql
-SELECT
-  FORMAT_DATE("%A", PARSE_DATE("%Y%m%d", date)) AS weekday,
-  SUM(totals.totalTransactionRevenue) / 1000000 as total_revenue
-  FROM
-    `bigquery-public-data.google_analytics_sample.ga_sessions_*`
-  GROUP BY weekday 
-  ORDER BY total_revenue
-  LIMIT 7
-```
-
-![answer to q1](./assets/q3.png)
-
 ## Conversion Rate 🙌
 
-### 1. What was the Conversion Rate by Channel? 
+### 3. What was the Conversion Rate by Channel? 
 
 ```sql
 SELECT
@@ -68,9 +56,9 @@ ORDER BY
   conversion_rate DESC
 ```
 
-![answer to q1](./assets/q4.png)
+![answer to q1](./assets/q3.png)
 
-### 2. What was the Conversion Rate by Device? 
+### 4. What was the Conversion Rate by Device? 
 
 ```sql
 SELECT
@@ -82,9 +70,9 @@ SELECT
   ORDER BY conversion_rate DESC
 ```
 
-![answer to q1](./assets/q5.png)
+![answer to q1](./assets/q4.png)
 
-### 3. What was the Conversion Rate by Landing Page? 
+### 5. What was the Conversion Rate by Landing Page? 
 
 ```sql
 SELECT
@@ -108,45 +96,59 @@ ORDER BY
   LIMIT 10
 ```
 
-![answer to q1](./assets/q6.png)
+![answer to q1](./assets/q5.png)
 
-## Bounce Rate 🏀
+## Transactions 💰
 
-### 1. What was the Bounce Rate by Channel? 
+### 6. What was the revenue for each month? 
 
 ```sql
 SELECT
-  channelGrouping,
-  ROUND( ( SUM(totals.bounces) / COUNT(*) ) * 100, 2 ) AS bounce_rate
-FROM
-  `bigquery-public-data.google_analytics_sample.ga_sessions_*`
-GROUP BY
-  channelGrouping
-ORDER BY
-  bounce_rate DESC
+  FORMAT_DATE("%B", PARSE_DATE("%Y%m%d", date)) AS month,
+  SUM(totals.totalTransactionRevenue) / 1000000 as total_revenue
+  FROM
+    `bigquery-public-data.google_analytics_sample.ga_sessions_*`
+  GROUP BY month
+  ORDER BY total_revenue DESC
+  LIMIT 12
+```
+
+![answer to q1](./assets/q6.png)
+
+### 7. What was the revenue for each product? 
+
+```sql
+SELECT
+  p.V2ProductName as product_name,
+  ROUND(SUM(p.productRevenue) / 1000000, 2) as product_revenue
+FROM `bigquery-public-data.google_analytics_sample.ga_sessions_2017041*`,
+  UNNEST(hits) AS h,
+  UNNEST(h.product) AS p
+  GROUP BY product_name
+  ORDER BY product_revenue DESC
+  LIMIT 10
 ```
 
 ![answer to q1](./assets/q7.png)
 
-### 2. What was the Bounce Rate by Device? 
+### 8. What was the revenue for each weekday?
 
 ```sql
 SELECT
-  device.deviceCategory AS device,
-  ROUND( ( SUM(totals.bounces) / COUNT(*) ) * 100, 2 ) AS bounce_rate
-FROM
-  `bigquery-public-data.google_analytics_sample.ga_sessions_*`
-GROUP BY
-  device
-ORDER BY
-  bounce_rate DESC
+  FORMAT_DATE("%A", PARSE_DATE("%Y%m%d", date)) AS weekday,
+  SUM(totals.totalTransactionRevenue) / 1000000 as total_revenue
+  FROM
+    `bigquery-public-data.google_analytics_sample.ga_sessions_*`
+  GROUP BY weekday 
+  ORDER BY total_revenue
+  LIMIT 7
 ```
 
 ![answer to q1](./assets/q8.png)
 
 ## Peaks ⛰️
 
-### 1. What day of the week do we have the most visitors?
+### 9. What day of the week do we have the most visitors?
 
 ```sql
 SELECT
@@ -163,7 +165,7 @@ SELECT
 
 ![answer to q1](./assets/q9.png)
 
-### 2. What was the total visits per hour on black friday?
+### 10. What was the total visits per hour on black friday?
 
 ```sql
 SELECT
@@ -179,5 +181,3 @@ SELECT
 ```
 
 ![answer to q1](./assets/q10.png)
-
-PS: in order for it to work on your computer, you need to insert a valid service account credentials path and your Google Cloud Platform project id into the `.env` file. You can also authenticate using your own login by running `gcloud auth application-default login` (need to have the gcloud SDK installed on the machine and turn on the Big Query API on your Google Cloud Platform project).
