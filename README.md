@@ -35,6 +35,8 @@ SELECT
   LIMIT 12
 ```
 
+![answer to q1](./assets/q2.png)
+
 ### 3. What was the revenue for each weekday?
 
 ```sql
@@ -47,6 +49,8 @@ SELECT
   ORDER BY total_revenue
   LIMIT 7
 ```
+
+![answer to q1](./assets/q3.png)
 
 ## Conversion Rate 🙌
 
@@ -64,6 +68,8 @@ ORDER BY
   conversion_rate DESC
 ```
 
+![answer to q1](./assets/q4.png)
+
 ### 2. What was the Conversion Rate by Device? 
 
 ```sql
@@ -75,6 +81,8 @@ SELECT
   GROUP BY device
   ORDER BY conversion_rate DESC
 ```
+
+![answer to q1](./assets/q5.png)
 
 ### 3. What was the Conversion Rate by Landing Page? 
 
@@ -100,6 +108,8 @@ ORDER BY
   LIMIT 10
 ```
 
+![answer to q1](./assets/q6.png)
+
 ## Bounce Rate 🏀
 
 ### 1. What was the Bounce Rate by Channel? 
@@ -116,6 +126,8 @@ ORDER BY
   bounce_rate DESC
 ```
 
+![answer to q1](./assets/q7.png)
+
 ### 2. What was the Bounce Rate by Device? 
 
 ```sql
@@ -130,30 +142,7 @@ ORDER BY
   bounce_rate DESC
 ```
 
-### 3. What was the Bounce Rate by Landing Page? 
-
-```sql
-SELECT
-  page_path as landing_page,
-  ROUND( ( SUM(bounces) / COUNT(*) ) * 100, 2 ) AS bounce_rate
-FROM (
-  SELECT
-    totals.bounces AS bounces,
-    isEntrance,
-    page.pagePath AS page_path
-  FROM
-    `bigquery-public-data.google_analytics_sample.ga_sessions_*`
-  CROSS JOIN
-    UNNEST(hits)
-  WHERE
-    isEntrance = TRUE )
-GROUP BY
-  landing_page
-ORDER BY
-  bounce_rate DESC
-LIMIT
-  10
-```
+![answer to q1](./assets/q8.png)
 
 ## Peaks ⛰️
 
@@ -172,6 +161,8 @@ SELECT
   LIMIT 7
 ```
 
+![answer to q1](./assets/q9.png)
+
 ### 2. What was the total visits per hour on black friday?
 
 ```sql
@@ -186,5 +177,7 @@ SELECT
   ORDER BY visits DESC
   LIMIT 24
 ```
+
+![answer to q1](./assets/q10.png)
 
 PS: in order for it to work on your computer, you need to insert a valid service account credentials path and your Google Cloud Platform project id into the `.env` file. You can also authenticate using your own login by running `gcloud auth application-default login` (need to have the gcloud SDK installed on the machine and turn on the Big Query API on your Google Cloud Platform project).
