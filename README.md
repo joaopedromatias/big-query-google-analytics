@@ -84,7 +84,7 @@ FROM (
     isEntrance,
     page.pagePath AS page_path
   FROM
-    `bigquery-public-data.google_analytics_sample.ga_sessions_2017043*`
+    `bigquery-public-data.google_analytics_sample.ga_sessions_*`
   CROSS JOIN
     UNNEST(hits)
   WHERE
@@ -121,7 +121,7 @@ SELECT
 SELECT
   p.V2ProductName as product_name,
   ROUND(SUM(p.productRevenue) / 1000000, 2) as product_revenue
-FROM `bigquery-public-data.google_analytics_sample.ga_sessions_2017041*`,
+FROM `bigquery-public-data.google_analytics_sample.ga_sessions_*`,
   UNNEST(hits) AS h,
   UNNEST(h.product) AS p
   GROUP BY product_name
