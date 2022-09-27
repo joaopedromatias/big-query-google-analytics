@@ -1,13 +1,21 @@
 {
-  "name": "big-query",
+  "name": "big-query-google-analytics",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is a project that runs some queries against a Google Analytics Universal public dataset on Big Query",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "keywords": [
+    "big-query",
+    "google-analytics",
+    "data",
+    "sql",
+    "javascript",
+    "node"
+  ],
+  "author": "joaopedromatias",
   "license": "ISC",
   "dependencies": {
     "@google-cloud/bigquery": "^6.0.3",

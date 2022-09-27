@@ -6,7 +6,7 @@ The `goal` is to answer some business questions in order to optimize decision ma
 
 PS: in order for it to work on your computer, you need to insert a valid service account credentials path and your Google Cloud Platform project id into the `.env` file. You can also authenticate using your own login by running `gcloud auth application-default login` (need to have the gcloud SDK installed on the machine and turn on the Big Query API on your Google Cloud Platform project).
 
-## Bounce Rate 🏀
+## Bounce Rate ⛹
 
 ### 1. What was the Bounce Rate by Channel? 
 
